@@ -44,6 +44,7 @@ var timeLeft
 // The gameTimer variable must be declared globally or the timer can't be stopped in other functions
 var gameTimer
 var place = 0
+var score = 0
 
 
 // Countdown timer function
@@ -60,6 +61,9 @@ function startTimer() {
     },1000)
 }
 
+var gameEnd = document.querySelector("#game-end");
+
+
 // Function for retrieving and printing the questions. Assigns them an index number
 function renderQs() {
     optionsField.innerHTML=""
@@ -67,8 +71,9 @@ function renderQs() {
     if (place >= questions.length) {
         questionField.textContent = "GAME OVER";
         clearInterval(gameTimer)
-        var score = timeLeft
+        score = timeLeft
         console.log("Your score is:",score)
+        endGame();
     } else {
         questionField.textContent = questions[place]
         // We start the for loop at 1 so we can hide the 0-index spot since it contains the answer key
@@ -81,7 +86,17 @@ function renderQs() {
     }
 }
 
-// This function detects clicks on the answer options and determines their correctness. If false, it subtracts time and re-renders the timer to display the subtracted time.
+// TODO: add score and name tracking
+function endGame() {
+    var winForm = document.createElement("input");
+    gameEnd.textContent = "Your score is " + score + " points!"
+    winForm.setAttribute("maxlength",3)
+    gameEnd.appendChild(winForm);
+    winForm.addEventListener("submit",function(){
+         console.log("blah")
+    })
+}
+    // This function detects clicks on the answer options and determines their correctness. If false, it subtracts time and re-renders the timer to display the subtracted time.
 optionsField.addEventListener("click",function(event){
     answer = event.target;
     answerIndex = answer.getAttribute("data-index");
@@ -100,7 +115,6 @@ optionsField.addEventListener("click",function(event){
     }
 })
 
-// TODO: add score and name tracking
 
 // Button for starting game
 startBtn.addEventListener("click", function() {

@@ -41,6 +41,10 @@ section {
     margin: 10px;
 }
 
+input {
+    display: block;
+}
+
 #start {
     width: 100px;
     height: 60px;
