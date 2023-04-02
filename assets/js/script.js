@@ -41,7 +41,24 @@ var optionsField = document.querySelector("#options")
 var resultField = document.querySelector("#result")
 
 var timeLeft
+// The gameTimer variable must be declared globally or the timer can't be stopped in other functions
+var gameTimer
 var next = 0
+
+
+// Countdown timer function
+function startTimer() {
+    timeLeft = 100
+    timer.textContent = timeLeft + " seconds left";
+    gameTimer = setInterval(function(){
+        timeLeft--
+        timer.textContent = timeLeft + " seconds left";
+        if(timeLeft===0) {
+            clearInterval(gameTimer)
+            timer.textContent = "Time's Up!";
+        }
+    },1000)
+}
 
 // Function for retrieving and printing the questions. Assigns them an index number
 function renderQs() {
@@ -82,26 +99,10 @@ optionsField.addEventListener("click",function(event){
     }
 })
 
-var gameTimer
-
-// Countdown timer function
-function countdown() {
-    timeLeft = 100
-    timer.textContent = timeLeft + " seconds left";
-    var gameTimer = setInterval(function(){
-        timeLeft--
-        timer.textContent = timeLeft + " seconds left";
-        if(timeLeft===0) {
-            clearInterval(gameTimer)
-            timer.textContent = "Time's Up!";
-        }
-    },1000)
-}
-
 // Button for starting game
 startBtn.addEventListener("click", function() {
     // Start timer
     // Get rid of button and render question and answers
-    countdown();
+    startTimer();
     renderQs();
 })
