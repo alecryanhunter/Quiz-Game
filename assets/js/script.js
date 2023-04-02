@@ -58,9 +58,18 @@ function renderQs() {
 }
 
 optionsField.addEventListener("click",function(event){
-    target = event.target
-    if (target.matches("li")) {
-        next++
+    answer = event.target;
+    answerIndex = answer.getAttribute("data-index");
+    if (answer.matches("li")) {
+        console.log("correct index:",correct[next])
+        console.log("answer index:",answerIndex)
+        if (answerIndex==correct[next]) {
+            console.log("correct!")
+        } else {
+            console.log("incorrect!")
+        }
+        console.log(answerIndex);
+        next++;
         renderQs();
     }
 })
