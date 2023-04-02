@@ -20,7 +20,6 @@ var completed = ""
 function completeCreate() {
     for (i=0;i<questions.length;i++) {
         completed = completed+"x"
-        console.log(completed)
     }
     completed = completed.split(``);
 }
@@ -39,24 +38,32 @@ var startBtn = document.querySelector("#start");
 var timer = document.querySelector("#timer");
 var questionField = document.querySelector("#question")
 var optionsField = document.querySelector("#options")
+var resultField = document.querySelector("#result")
 
 var timeLeft
 var next = 0
 
 // Function for retrieving and printing the questions. Assigns them an index number
 function renderQs() {
-    // TODO: If statement saying if next exceeds the question length, it goes to game over
     optionsField.innerHTML=""
     startBtn.setAttribute("style","display:none");
-    questionField.textContent = questions[next]
-    for (i=0;i<options[next].length;i++) {
-        var li = document.createElement("li")
-        li.textContent=options[next][i];
-        li.dataset.index=i;
-        optionsField.appendChild(li)
+    if (next >= questions.length) {
+        questionField.textContent = "GAME OVER";
+        clearInterval(gameTimer)
+        var score = timeLeft
+        console.log("Your score is:",score)
+    } else {
+        questionField.textContent = questions[next]
+        for (i=0;i<options[next].length;i++) {
+            var li = document.createElement("li")
+            li.textContent=options[next][i];
+            li.dataset.index=i;
+            optionsField.appendChild(li)
+        }
     }
 }
 
+// This function detects clicks on the answer options and determines their correctness. If false, it subtracts time and re-renders the timer to display the subtracted time.
 optionsField.addEventListener("click",function(event){
     answer = event.target;
     answerIndex = answer.getAttribute("data-index");
@@ -64,15 +71,18 @@ optionsField.addEventListener("click",function(event){
         console.log("correct index:",correct[next])
         console.log("answer index:",answerIndex)
         if (answerIndex==correct[next]) {
-            console.log("correct!")
+            resultField.textContent="Correct!"
         } else {
-            console.log("incorrect!")
+            resultField.textContent="Incorrect..."
+            timeLeft -= 10
+            timer.textContent = timeLeft + " seconds left";
         }
-        console.log(answerIndex);
         next++;
         renderQs();
     }
 })
+
+var gameTimer
 
 // Countdown timer function
 function countdown() {
