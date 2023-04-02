@@ -6,7 +6,7 @@
 // If an answer is incorrect, it deducts time
 // Game is finished when all questions are answered or timer reaches 0
 // Can save your initials and score
-    // Do this use local storage
+    // Do this using local storage
 
 
 // Store questions in one array, with answers in a second array (of arrays), with indexes matching
@@ -88,7 +88,7 @@ optionsField.addEventListener("click",function(event){
     if (answer.matches("li")) {
         console.log("correct index:",options[place][0])
         console.log("answer index:",answerIndex)
-        if (answerIndex==options[0]) {
+        if (answerIndex==options[place][0]) {
             resultField.textContent="Correct!"
         } else {
             resultField.textContent="Incorrect..."
