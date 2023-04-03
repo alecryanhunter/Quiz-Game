@@ -130,6 +130,7 @@ initialForm.addEventListener("submit",function(event){
     storeScores();
     renderScores();
     replayBtn.textContent = "Play Again";
+    resultField.textContent=""
 })
 
 // This function detects clicks on the answer options and determines their correctness. If false, it subtracts time and re-renders the timer to display the subtracted time.
@@ -155,7 +156,8 @@ optionsField.addEventListener("click",function(event){
 scoreLink.addEventListener("click",function(){
     console.log("go to high scores");
     clearInterval(gameTimer);
-    timer.textContent = "Hit the buton to start playing!"
+    timer.textContent = "Hit the button to start playing!"
+    resultField.textContent=""
     retrieveScores();
     renderScores();
 })
@@ -164,6 +166,7 @@ scoreLink.addEventListener("click",function(){
 startBtn.addEventListener("click", function() {
     // Start timer
     // Get rid of button and render question and answers
+    resultField.textContent=""
     startTimer();
     renderQs();
 })
@@ -173,6 +176,7 @@ replayBtn.addEventListener("click", function(){
     console.log("replay the game");
     playScreen.removeAttribute("style");
     scoreScreen.setAttribute("style","display:none");
+    resultField.textContent=""
     startTimer();
     renderQs();
 })
