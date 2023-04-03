@@ -9,13 +9,13 @@
 <body>
 
     <header>
-        <p id="scores">High Scores</p>
+        <p id="scores-link">High Scores</p>
         <p id="timer">Timer Goes Here</p>
     </header>
 
     <main>
 
-        <section class="initial">
+        <section class="initial game">
 
             <h2 id="question">Question Goes Here</h2>
 
@@ -27,7 +27,7 @@
             
         </section>
         
-        <section class="game-end" style="display:none">
+        <section class="game-end game" style="display:none">
             <h2>You Win!</h2>
             <p>Thank you for playing!</p>
             <p>Enter your initials to track your score!</p>
@@ -37,6 +37,11 @@
                 <input type="submit" value="Submit">
             </form>
             
+        </section>
+
+        <section class="scores">
+            <ul></ul>
+            <button id="replay">Play Again</button>
         </section>
         
         <p id="result"></p>

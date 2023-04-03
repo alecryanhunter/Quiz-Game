@@ -27,6 +27,7 @@ function completeCreate() {
 completeCreate()
 
 var startBtn = document.querySelector("#start");
+var replayBtn = document.querySelector("#replay")
 var timer = document.querySelector("#timer");
 var questionField = document.querySelector("#question")
 var optionsField = document.querySelector("#options")
@@ -35,7 +36,8 @@ var initialForm = document.querySelector("form")
 var initialInput = document.querySelector("#initials")
 var endScreen = document.querySelector(".game-end")
 var playScreen = document.querySelector(".initial")
-var scoreLink = document.querySelector("#scores")
+var scoreLink = document.querySelector("#scores-link")
+var scoreList = document.querySelector(".scores ul")
 
 var timeLeft
 // The gameTimer variable must be declared globally or the timer can't be stopped in other functions
@@ -82,7 +84,27 @@ function renderQs() {
     }
 }
 
-// TODO: add score and name tracking
+function retrieveScores() {
+    var storedScores = JSON.parse(localStorage.getItem("scores"));
+    if (storedScores !== null) {
+        highScores = storedScores;
+    }
+}
+
+function renderScores() {
+    scoreList.innerHTML=""
+    playScreen.setAttribute("style","display:none");
+    for (i=0;i<highScores.length;i++) {
+        var li = document.createElement("li")
+        li.textContent=highScores[i]
+        scoreList.appendChild(li)
+    }
+}
+
+function storeScores() {
+    localStorage.setItem("scores",JSON.stringify(highScores))
+}
+
 function endGame() {
     if (outcome === "loss") {
         optionsField.innerHTML="";
@@ -93,9 +115,12 @@ function endGame() {
     }
 }
 
+// TODO: Restrict form input to characters only??
 initialForm.addEventListener("submit",function(event){
     event.preventDefault();
+    retrieveScores();
     var initials = initialInput.value.trim();
+    initials = initials.toUpperCase();
     if (initials === "") {
         return;
     }
@@ -103,6 +128,8 @@ initialForm.addEventListener("submit",function(event){
     newScore.push(initials);
     newScore.push(score);
     highScores.push(newScore)
+    storeScores();
+    renderScores();
 })
 
 // This function detects clicks on the answer options and determines their correctness. If false, it subtracts time and re-renders the timer to display the subtracted time.
@@ -126,6 +153,8 @@ optionsField.addEventListener("click",function(event){
 
 scoreLink.addEventListener("click",function(){
     console.log("go to high scores");
+    retrieveScores();
+    renderScores();
 })
 
 // Button for starting game
