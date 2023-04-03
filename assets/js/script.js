@@ -13,6 +13,7 @@
 // Use the 0-index spot in the options array to denote which of the 4 answers is the correct one
 var questions = ["Question 1","Question 2","Question 3","Question 4","Question 5"];
 var options = [[3,"1A","1B","1C","1D"],[1,"2A","2B","2C","2D"],[4,"3A","3B","3C","3D"],[2,"4A","4B","4C","4D"],[1,"5A","5B","5C","5D"]];
+var highScores = []
 
 var completed = ""
 // This function creates an array of x's the same length as the questions, which I can then use to check if that specific question index has been done before, if I implement randomization
@@ -25,27 +26,23 @@ function completeCreate() {
 }
 completeCreate()
 
-// This function is for debugging only, making sure that my questions and options are always the same length
-function lengthCheck() {
-    if (questions.length === options.length) {
-    } else {
-        console.log("QUESTION/OPTIONS ARRAY LENGTH DISCREPANCY")
-    }
-}
-lengthCheck();
-
 var startBtn = document.querySelector("#start");
 var timer = document.querySelector("#timer");
 var questionField = document.querySelector("#question")
 var optionsField = document.querySelector("#options")
 var resultField = document.querySelector("#result")
+var initialForm = document.querySelector("form")
+var initialInput = document.querySelector("#initials")
+var endScreen = document.querySelector(".game-end")
+var playScreen = document.querySelector(".initial")
+var scoreLink = document.querySelector("#scores")
 
 var timeLeft
 // The gameTimer variable must be declared globally or the timer can't be stopped in other functions
 var gameTimer
 var place = 0
 var score = 0
-
+var outcome
 
 // Countdown timer function
 function startTimer() {
@@ -57,22 +54,21 @@ function startTimer() {
         if(timeLeft===0) {
             clearInterval(gameTimer)
             timer.textContent = "Time's Up!";
+            outcome = "loss"
+            endGame();
         }
     },1000)
 }
-
-var gameEnd = document.querySelector("#game-end");
-
 
 // Function for retrieving and printing the questions. Assigns them an index number
 function renderQs() {
     optionsField.innerHTML=""
     startBtn.setAttribute("style","display:none");
     if (place >= questions.length) {
-        questionField.textContent = "GAME OVER";
         clearInterval(gameTimer)
         score = timeLeft
         console.log("Your score is:",score)
+        outcome = "win";
         endGame();
     } else {
         questionField.textContent = questions[place]
@@ -88,15 +84,28 @@ function renderQs() {
 
 // TODO: add score and name tracking
 function endGame() {
-    var winForm = document.createElement("input");
-    gameEnd.textContent = "Your score is " + score + " points!"
-    winForm.setAttribute("maxlength",3)
-    gameEnd.appendChild(winForm);
-    winForm.addEventListener("submit",function(){
-         console.log("blah")
-    })
+    if (outcome === "loss") {
+        optionsField.innerHTML="";
+        questionField.textContent = "You Lose!"
+    } else {
+        endScreen.setAttribute("style","display:flex;")
+        playScreen.setAttribute("style","display:none")
+    }
 }
-    // This function detects clicks on the answer options and determines their correctness. If false, it subtracts time and re-renders the timer to display the subtracted time.
+
+initialForm.addEventListener("submit",function(event){
+    event.preventDefault();
+    var initials = initialInput.value.trim();
+    if (initials === "") {
+        return;
+    }
+    var newScore = []
+    newScore.push(initials);
+    newScore.push(score);
+    highScores.push(newScore)
+})
+
+// This function detects clicks on the answer options and determines their correctness. If false, it subtracts time and re-renders the timer to display the subtracted time.
 optionsField.addEventListener("click",function(event){
     answer = event.target;
     answerIndex = answer.getAttribute("data-index");
@@ -115,6 +124,9 @@ optionsField.addEventListener("click",function(event){
     }
 })
 
+scoreLink.addEventListener("click",function(){
+    console.log("go to high scores");
+})
 
 // Button for starting game
 startBtn.addEventListener("click", function() {

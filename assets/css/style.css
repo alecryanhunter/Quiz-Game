@@ -2,7 +2,7 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    /* border: 1px solid black; */
+    border: 1px solid black;
 }
 
 header {
@@ -27,7 +27,8 @@ body {
 
 main {
     display: flex;
-    justify-content: center;
+    align-items: center;
+    flex-direction: column;
 }
 
 section {
@@ -62,4 +63,10 @@ li {
     background-color: goldenrod;
     border-radius: 25px;
     text-align: center;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    
 }

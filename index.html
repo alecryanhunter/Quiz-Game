@@ -9,26 +9,37 @@
 <body>
 
     <header>
-        <p>High Scores</p>
+        <p id="scores">High Scores</p>
         <p id="timer">Timer Goes Here</p>
     </header>
 
     <main>
 
-        <section>
+        <section class="initial">
 
             <h2 id="question">Question Goes Here</h2>
-
-            <p id="game-end"></p>
 
             <button id="start">Start!</button>
 
             <!-- This empty ul is where the answer options will be appended to -->
             <ul id="options"></ul>
 
-            <p id="result"></p>
-
+            
         </section>
+        
+        <section class="game-end" style="display:none">
+            <h2>You Win!</h2>
+            <p>Thank you for playing!</p>
+            <p>Enter your initials to track your score!</p>
+
+            <form action="">
+                <input type="text" placeholder="Enter your intials!" maxlength="3" minlength="1" id="initials">
+                <input type="submit" value="Submit">
+            </form>
+            
+        </section>
+        
+        <p id="result"></p>
 
     </main>
 
