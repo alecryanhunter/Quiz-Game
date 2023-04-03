@@ -2,7 +2,7 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    border: 1px solid black;
+    /* border: 1px solid black; */
 }
 
 header {
@@ -69,4 +69,16 @@ form {
     display: flex;
     flex-direction: column;
     
+}
+
+table {
+}
+
+td {
+    font-size: 130%;
+    text-align: center;
+}
+
+td:first-child {
+    font-size: 150%;
 }

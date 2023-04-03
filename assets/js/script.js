@@ -24,7 +24,7 @@ var resultField = document.querySelector("#result");
 var initialForm = document.querySelector("form");
 var initialInput = document.querySelector("#initials");
 var endScreen = document.querySelector(".game-end");
-var playScreen = document.querySelector(".initial");
+var playScreen = document.querySelector(".play");
 var scoreScreen = document.querySelector(".scores");
 var scoreLink = document.querySelector("#scores-link");
 var scoreList = document.querySelector(".scores table");
@@ -154,6 +154,8 @@ optionsField.addEventListener("click",function(event){
 // this function sends you to the high scores if you click on the item in the heading
 scoreLink.addEventListener("click",function(){
     console.log("go to high scores");
+    clearInterval(gameTimer);
+    timer.textContent = "Hit the buton to start playing!"
     retrieveScores();
     renderScores();
 })
