@@ -38,12 +38,12 @@ var outcome
 
 // Countdown timer function
 function startTimer() {
-    timeLeft = 100
+    timeLeft = 5
     timer.textContent = timeLeft + " seconds left";
     gameTimer = setInterval(function(){
         timeLeft--
         timer.textContent = timeLeft + " seconds left";
-        if(timeLeft===0) {
+        if(timeLeft<=0) {
             clearInterval(gameTimer)
             timer.textContent = "Time's Up!";
             outcome = "loss"
@@ -106,11 +106,13 @@ function storeScores() {
 function endGame() {
     place = 0;
     if (outcome === "loss") {
+        startBtn.textContent="Try Again!";
+        startBtn.removeAttribute("style");
         optionsField.innerHTML="";
         questionField.textContent = "You Lose!"
     } else {
-        endScreen.setAttribute("style","display:flex;")
         playScreen.setAttribute("style","display:none")
+        endScreen.removeAttribute("style")
     }
 }
 
@@ -145,7 +147,15 @@ optionsField.addEventListener("click",function(event){
         } else {
             resultField.textContent="Incorrect..."
             timeLeft -= 10
-            timer.textContent = timeLeft + " seconds left";
+            if(timeLeft<=0) {
+                clearInterval(gameTimer)
+                timer.textContent = "Time's Up!";
+                outcome = "loss";
+                endGame();
+                return;
+            } else {
+                timer.textContent = timeLeft + " seconds left";
+            }
         }
         place++;
         renderQs();
