@@ -46,7 +46,8 @@ input {
     display: block;
 }
 
-#start {
+#start,
+#replay {
     width: 100px;
     height: 60px;
     margin: 20px;
@@ -71,12 +72,10 @@ form {
     
 }
 
-table {
-}
-
 td {
     font-size: 130%;
     text-align: center;
+    padding: 5px 10px;
 }
 
 td:first-child {
