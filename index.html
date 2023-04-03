@@ -10,7 +10,7 @@
 
     <header>
         <p id="scores-link">High Scores</p>
-        <p id="timer">Timer Goes Here</p>
+        <p id="timer">Hit Start To Play!</p>
     </header>
 
     <main>
@@ -29,6 +29,7 @@
         
         <section class="game-end game" style="display:none">
             <h2>You Win!</h2>
+            <h3></h3>
             <p>Thank you for playing!</p>
             <p>Enter your initials to track your score!</p>
 
@@ -39,9 +40,14 @@
             
         </section>
 
-        <section class="scores">
-            <ul></ul>
-            <button id="replay">Play Again</button>
+        <section class="scores" style="display:none">
+            <table>
+                <tr>
+                    <td>Name 1</td>
+                    <td>Score 1</td>
+                </tr>
+            </table>
+            <button id="replay">Play The Game</button>
         </section>
         
         <p id="result"></p>

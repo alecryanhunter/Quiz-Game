@@ -15,29 +15,19 @@ var questions = ["Question 1","Question 2","Question 3","Question 4","Question 5
 var options = [[3,"1A","1B","1C","1D"],[1,"2A","2B","2C","2D"],[4,"3A","3B","3C","3D"],[2,"4A","4B","4C","4D"],[1,"5A","5B","5C","5D"]];
 var highScores = []
 
-var completed = ""
-// This function creates an array of x's the same length as the questions, which I can then use to check if that specific question index has been done before, if I implement randomization
-// TODO: implement randomization of questions
-function completeCreate() {
-    for (i=0;i<questions.length;i++) {
-        completed = completed+"x"
-    }
-    completed = completed.split(``);
-}
-completeCreate()
-
 var startBtn = document.querySelector("#start");
-var replayBtn = document.querySelector("#replay")
+var replayBtn = document.querySelector("#replay");
 var timer = document.querySelector("#timer");
-var questionField = document.querySelector("#question")
-var optionsField = document.querySelector("#options")
-var resultField = document.querySelector("#result")
-var initialForm = document.querySelector("form")
-var initialInput = document.querySelector("#initials")
-var endScreen = document.querySelector(".game-end")
-var playScreen = document.querySelector(".initial")
-var scoreLink = document.querySelector("#scores-link")
-var scoreList = document.querySelector(".scores ul")
+var questionField = document.querySelector("#question");
+var optionsField = document.querySelector("#options");
+var resultField = document.querySelector("#result");
+var initialForm = document.querySelector("form");
+var initialInput = document.querySelector("#initials");
+var endScreen = document.querySelector(".game-end");
+var playScreen = document.querySelector(".initial");
+var scoreScreen = document.querySelector(".scores");
+var scoreLink = document.querySelector("#scores-link");
+var scoreList = document.querySelector(".scores table");
 
 var timeLeft
 // The gameTimer variable must be declared globally or the timer can't be stopped in other functions
@@ -69,7 +59,7 @@ function renderQs() {
     if (place >= questions.length) {
         clearInterval(gameTimer)
         score = timeLeft
-        console.log("Your score is:",score)
+        document.querySelector(".game-end h3").textContent = "Your score is: " + score;
         outcome = "win";
         endGame();
     } else {
@@ -94,10 +84,18 @@ function retrieveScores() {
 function renderScores() {
     scoreList.innerHTML=""
     playScreen.setAttribute("style","display:none");
+    endScreen.setAttribute("style","display:none");
+    scoreScreen.removeAttribute("style");
+    replayBtn.textContent = "Play the Game";
     for (i=0;i<highScores.length;i++) {
-        var li = document.createElement("li")
-        li.textContent=highScores[i]
-        scoreList.appendChild(li)
+        var tr = document.createElement("tr")
+        var td1 = document.createElement("td")
+        var td2 = document.createElement("td")
+        td1.textContent=highScores[i][0]
+        td2.textContent=highScores[i][1]
+        tr.appendChild(td1)
+        tr.appendChild(td2)
+        scoreList.appendChild(tr)
     }
 }
 
@@ -106,6 +104,7 @@ function storeScores() {
 }
 
 function endGame() {
+    place = 0;
     if (outcome === "loss") {
         optionsField.innerHTML="";
         questionField.textContent = "You Lose!"
@@ -130,6 +129,7 @@ initialForm.addEventListener("submit",function(event){
     highScores.push(newScore)
     storeScores();
     renderScores();
+    replayBtn.textContent = "Play Again";
 })
 
 // This function detects clicks on the answer options and determines their correctness. If false, it subtracts time and re-renders the timer to display the subtracted time.
@@ -151,6 +151,7 @@ optionsField.addEventListener("click",function(event){
     }
 })
 
+// this function sends you to the high scores if you click on the item in the heading
 scoreLink.addEventListener("click",function(){
     console.log("go to high scores");
     retrieveScores();
@@ -161,6 +162,15 @@ scoreLink.addEventListener("click",function(){
 startBtn.addEventListener("click", function() {
     // Start timer
     // Get rid of button and render question and answers
+    startTimer();
+    renderQs();
+})
+
+// Button for replaying - found at endgame and on the score page
+replayBtn.addEventListener("click", function(){
+    console.log("replay the game");
+    playScreen.removeAttribute("style");
+    scoreScreen.setAttribute("style","display:none");
     startTimer();
     renderQs();
 })
