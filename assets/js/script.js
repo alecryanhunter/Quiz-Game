@@ -1,7 +1,7 @@
 // Store questions in one array, with answers in a second array (of arrays), with indexes matching
 // Use the 0-index spot in the options array to denote which of the 4 answers is the correct one
 var questions = ["Question 1","Question 2","Question 3","Question 4","Question 5"];
-var options = [[3,"1A","1B","1C","1D"],[1,"2A","2B","2C","2D"],[4,"3A","3B","3C","3D"],[2,"4A","4B","4C","4D"],[1,"5A","5B","5C","5D"]];
+var options = [[3,"1A","1B","1C!","1D"],[1,"2A!","2B","2C","2D"],[4,"3A","3B","3C","3D!"],[2,"4A","4B!","4C","4D"],[1,"5A!","5B","5C","5D"]];
 var highScores = []
 
 var startBtn = document.querySelector("#start");
@@ -87,6 +87,7 @@ function renderScores() {
 }
 
 // This function stringifies the array of highScores and puts it into local storage.
+// TODO: Have this function sort the highScores array before storing it
 function storeScores() {
     localStorage.setItem("scores",JSON.stringify(highScores))
 }
@@ -135,6 +136,7 @@ function endGame() {
         var submit = document.createElement("input");
         submit.setAttribute("type","submit")
         submit.setAttribute("value","Submit")
+        submit.setAttribute("class","submitBtn")
         scoreForm.appendChild(textbox);
         scoreForm.appendChild(submit);
         playScreen.appendChild(scoreForm);        
@@ -182,10 +184,9 @@ optionsField.addEventListener("click",function(event){
     var answerIndex = answer.getAttribute("data-index");
     if (answer.matches("li")) {
         if (answerIndex==options[place][0]) {
-            assessment.textContent="Correct!"
             answer.setAttribute("class","correct");
         } else {
-            assessment.textContent="Incorrect..."
+            assessment.textContent="Correct answer was: " + options[place][options[place][0]]
             answer.setAttribute("class","wrong");
             timeLeft -= 10
             if(timeLeft<=0) {
@@ -197,9 +198,10 @@ optionsField.addEventListener("click",function(event){
         }
         pause = true;
         setTimeout(function(){
+            assessment.textContent = ""
             place++;
             renderQs();
-        },750);
+        },1000);
     }
 })
 
