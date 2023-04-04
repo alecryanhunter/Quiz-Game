@@ -53,6 +53,12 @@ input {
     margin: 20px;
 }
 
+#score-link,
+#timer {
+    width: 200px;
+    text-align: center;
+}
+
 ul {
     width: 50%;
 }

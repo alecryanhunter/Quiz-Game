@@ -10,15 +10,17 @@
 
     <header>
         <p id="scores-link">High Scores</p>
-        <p id="timer">Hit Start To Play!</p>
+        <p id="timer"></p>
     </header>
 
     <main>
 
         <section class="play game">
 
-            <h2 id="question">Question Goes Here</h2>
+            <h2 id="info">Hit Start to Play!</h2>
+            <table>
 
+            </table>
             <button id="start">Start!</button>
 
             <!-- This empty ul is where the answer options will be appended to -->
@@ -29,9 +31,8 @@
         <section class="game-end game" style="display:none">
             <h2>You Win!</h2>
             <h3></h3>
-            <p>Thank you for playing!</p>
             <p>Enter your initials to track your score!</p>
-
+            
             <form action="">
                 <input type="text" placeholder="Enter your intials!" maxlength="3" minlength="1" id="initials">
                 <input type="submit" value="Submit">
@@ -40,16 +41,10 @@
         </section>
 
         <section class="scores" style="display:none">
-            <table>
-                <tr>
-                    <td>Name 1</td>
-                    <td>Score 1</td>
-                </tr>
-            </table>
             <button id="replay">Play The Game</button>
         </section>
         
-        <p id="result"></p>
+        <p id="assessment"></p>
 
     </main>
 
