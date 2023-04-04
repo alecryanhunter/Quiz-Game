@@ -87,3 +87,11 @@ td {
 td:first-child {
     font-size: 150%;
 }
+
+.wrong {
+    background-color: red;
+}
+
+.correct {
+    background-color: greenyellow;
+}

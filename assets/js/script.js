@@ -19,6 +19,7 @@ var gameTimer
 var place = 0
 var score = 0
 var outcome
+var pause = false;
 
 // Countdown timer function
 function startTimer() {
@@ -50,6 +51,7 @@ function renderQs() {
             li.dataset.index=i;
             optionsField.appendChild(li)
         }
+        pause = false;
     }
 }
 
@@ -173,17 +175,19 @@ document.addEventListener("submit",function(event){
 // time and checks if that reduced it below 0, if so, ending the game. If not,
 // regardless of correctness, it increments the place variable and renders again.
 optionsField.addEventListener("click",function(event){
+    if (pause) {
+        return;
+    }
     var answer = event.target;
     var answerIndex = answer.getAttribute("data-index");
     if (answer.matches("li")) {
         if (answerIndex==options[place][0]) {
             assessment.textContent="Correct!"
-            assessment.setAttribute("class","correct");
+            answer.setAttribute("class","correct");
         } else {
             assessment.textContent="Incorrect..."
-            assessment.setAttribute("class","wrong");
+            answer.setAttribute("class","wrong");
             timeLeft -= 10
-            // TODO: turn this into function since it's used twice?
             if(timeLeft<=0) {
                 timesUp();
                 return;
@@ -191,8 +195,11 @@ optionsField.addEventListener("click",function(event){
                 timer.textContent = timeLeft + " seconds left";
             }
         }
-        place++;
-        renderQs();
+        pause = true;
+        setTimeout(function(){
+            place++;
+            renderQs();
+        },750);
     }
 })
 
@@ -216,7 +223,6 @@ scoreLink.addEventListener("click",function(){
 // more details.
 startBtn.addEventListener("click", function() {
     for (i=0;i<highScores.length;i++) {
-        // TODO: Cannot remove all the high score nodes for some reason? Pop it out into another function
         var hide = document.querySelector(".hide")
         var table = document.querySelector(".play table")
         table.removeChild(hide)
