@@ -208,3 +208,16 @@ td:first-child {
         transform: scale(1.0);
     }
 }
+
+/*
+* PHONE USAGE STYLING
+*/
+
+@media screen and (max-width:992px) {
+    section {
+        width: 90%;
+    }
+    ul {
+        width: 90%;
+    }
+}
