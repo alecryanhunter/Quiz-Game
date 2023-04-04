@@ -13,8 +13,8 @@ var assessment = document.querySelector("#assessment");
 var scoreLink = document.querySelector("#scores-link");
 var playScreen = document.querySelector(".play");
 
-var timeLeft
 // The gameTimer variable must be declared globally or the timer can't be stopped in other functions
+var timeLeft
 var gameTimer
 var place = 0
 var score = 0
@@ -36,6 +36,7 @@ function startTimer() {
 // Function for retrieving and printing the questions. Assigns them an index number
 function renderQs() {
     optionsField.innerHTML=""
+    infoField.removeAttribute("style");
     startBtn.setAttribute("style","display:none");
     if (place >= questions.length) {
         outcome = "win";
@@ -68,13 +69,15 @@ function renderScores() {
         playScreen.removeChild(hide)
     }
     startBtn.removeAttribute("style");
-    replayBtn.textContent = "Play the Game";
     for (i=0;i<highScores.length;i++) {
         var tr = document.createElement("tr")
         var td1 = document.createElement("td")
         var td2 = document.createElement("td")
+        tr.setAttribute("class","hide")
         td1.textContent=highScores[i][0]
+        td1.setAttribute("class","hide")
         td2.textContent=highScores[i][1]
+        td2.setAttribute("class","hide")
         tr.appendChild(td1)
         tr.appendChild(td2)
         scoreList.appendChild(tr)
@@ -159,8 +162,8 @@ document.addEventListener("submit",function(event){
     highScores.push(newScore)
     storeScores();
     renderScores();
-    replayBtn.textContent = "Play Again";
     assessment.textContent=""
+    startBtn.textContent="Play Again"
 })
 
 // This function detects clicks on the question options. It also assesses
@@ -199,8 +202,10 @@ optionsField.addEventListener("click",function(event){
 // of scores. See functions above for more information.
 scoreLink.addEventListener("click",function(){
     clearInterval(gameTimer);
-    timer.textContent = "Hit the button to start playing!"
-    assessment.textContent=""
+    place=0
+    timer.textContent = "Hit the button to start playing!";
+    assessment.textContent="";
+    optionsField.innerHTML="";
     retrieveScores();
     renderScores();
 })
@@ -210,6 +215,12 @@ scoreLink.addEventListener("click",function(){
 // timer and starts the question rendering process. See functions above for
 // more details.
 startBtn.addEventListener("click", function() {
+    for (i=0;i<highScores.length;i++) {
+        // TODO: Cannot remove all the high score nodes for some reason? Pop it out into another function
+        var hide = document.querySelector(".hide")
+        var table = document.querySelector(".play table")
+        table.removeChild(hide)
+    }
     assessment.textContent=""
     startTimer();
     renderQs();
@@ -218,10 +229,10 @@ startBtn.addEventListener("click", function() {
 // This button is associated with the scores section, being used to replay the
 // game on a "win" or if you navigate to the scores tab. It does the same thing
 // as the previous button, say hiding the score screen and showing the play screen.
-replayBtn.addEventListener("click", function(){
-    playScreen.removeAttribute("style");
-    scoreScreen.setAttribute("style","display:none");
-    assessment.textContent=""
-    startTimer();
-    renderQs();
-})
+// replayBtn.addEventListener("click", function(){
+//     playScreen.removeAttribute("style");
+//     scoreScreen.setAttribute("style","display:none");
+//     assessment.textContent=""
+//     startTimer();
+//     renderQs();
+// })
