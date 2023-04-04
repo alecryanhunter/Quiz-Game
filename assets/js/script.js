@@ -64,6 +64,7 @@ function retrieveScores() {
 
 var scoreList = document.querySelector(".play table");
 function renderScores() {
+    highScores.sort((a,b) => b[1] - a[1])
     scoreList.innerHTML=""
     infoField.setAttribute("style","display:none")
     while(document.querySelector(".play .hide")) {
@@ -87,8 +88,8 @@ function renderScores() {
 }
 
 // This function stringifies the array of highScores and puts it into local storage.
-// TODO: Have this function sort the highScores array before storing it
 function storeScores() {
+    highScores.sort((a,b) => b[1] - a[1])
     localStorage.setItem("scores",JSON.stringify(highScores))
 }
 
