@@ -5,8 +5,28 @@
 // within that same array, is the correct one. So a '3' in index-0 would indicate
 // the third question (or index-3) is the correct one. This also usefully syncs up
 // options number and index.
-var questions = ["Question 1","Question 2","Question 3","Question 4","Question 5"];
-var options = [[3,"1A","1B","1C!","1D"],[1,"2A!","2B","2C","2D"],[4,"3A","3B","3C","3D!"],[2,"4A","4B!","4C","4D"],[1,"5A!","5B","5C","5D"]];
+var questions = [
+    "Which variety of bread is our bread?",
+    "Which of these items is gluten-free?",
+    "An order has 3 Mussels, 1 Soup Cup, and 2 Soup Bowls. How much bread will there be?",
+    "Which of these does not go on a Ribeye?",
+    "Which of these foods is most susceptible to nut allergy contamination?",
+    "Which of these items is vegan?",
+    "The Fish and Chips batter contains:",
+    "The cut of meat used in the Carpaccio is:",
+    "The burgers weigh:",
+    "The largest component in the salad dressings is:"];
+var options = [
+    [2,"Sourdough","French","Ciabatta","Crostini"],
+    [1,"House Salad","Fish and Chips","Side Bread","Chowder"],
+    [2,"12 slices","14 slices","13 slices","15 slices"],
+    [2,"Mushrooms","Gastrique","Fingerling Potatoes","Demiglace"],
+    [1,"Brussels","Carpaccio","Salmon","Black Cod"],
+    [4,"Beet Salad","Ribeye","Potage","None Of The Above"],
+    [3,"Flour and Beer.","Flour, Cornstarch, and Beer.","Flour, Cornstarch, Beer, and Vodka.","Flour, Cornstarch, Corn Meal, Beer, and Vodka."],
+    [4,"Flank","Skirt","Sirloin","Ribeye"],
+    [2,"10 ounces","8 ounces","6 ounces","None of the Above"],
+    [3,"Water","Vinegar","Oil","Fruit Puree"]];
 var highScores = []
 
 // These are all the DOM nodes I need globally, declared at the top.
@@ -33,7 +53,7 @@ var pause = false;
 // every second, checking if the time has reached 0. If it has, it calls the
 // timesUp function listed below.
 function startTimer() {
-    timeLeft = 5
+    timeLeft = 100
     timer.textContent = timeLeft + " seconds left";
     gameTimer = setInterval(function(){
         timeLeft--
