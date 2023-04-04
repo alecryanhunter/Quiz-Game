@@ -9,29 +9,38 @@
 <body>
 
     <header>
+
         <h3 id="scores-link">High Scores</h3>
+
         <h3 id="timer"></h3>
+
     </header>
 
     <main>
 
+        <!-- 
+            Could go without some of these, since they aren't there on page load,
+            but I like having the table and ul to "anchor" other appends to in a
+            specific location.
+        -->
         <section class="play game">
 
             <h2 id="info">Hit Start to Play!</h2>
-            <table>
 
-            </table>
+            <table></table>
+
             <button id="start">Start!</button>
 
             <!-- This empty ul is where the answer options will be appended to -->
             <ul id="options"></ul>
             
+            <h3 id="assessment"></h3>
+
         </section>
-        
-        <h3 id="assessment"></h3>
 
     </main>
 
     <script src="./assets/js/script.js"></script>
+
 </body>
 </html>

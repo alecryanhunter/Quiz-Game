@@ -1,8 +1,8 @@
 :root {
     --primary: #114B5F;
     --light: #F3E9D2;
-    --button: #1A936F;
-    --yellow: #F3DE8A;
+    --secondary: #1A936F;
+    --button: #F3DE8A;
 }
 
 * {
@@ -10,46 +10,6 @@
     padding: 0;
     box-sizing: border-box;
     font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
-    /* border: 1px solid black; */
-}
-
-body {
-    background-color: var(--light);
-}
-
-header {
-    background-color: var(--primary);
-    display: flex;
-    justify-content: space-around;
-    height: 10vh;
-    align-items: center;
-    color: var(--light);
-}
-
-#info {
-    padding: 10px;
-}
-
-form input:first-of-type {
-    padding: 5px;
-    background-color: white;
-    border: 2px inset var(--button);
-}
-
-form input {
-    border: 5px outset var(--button);
-    background-color: var(--yellow);
-}
-
-#scores-link,
-#timer {
-    font-size: 175%;
-    width: 225px;
-    text-align: center;
-}
-
-#scores-link:hover {
-    color: var(--yellow);
 }
 
 main {
@@ -58,9 +18,45 @@ main {
     flex-direction: column;
 }
 
+/**
+* HEADER STYLING
+* This contains the link to the high scores page and the timer. The only slightly
+* interesting thing is the link to the high score changes color when you hover it.
+*/
+
+header {
+    background-color: var(--primary);
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    height: 10vh;
+    color: var(--light);
+}
+
+#scores-link,
+#timer {
+    font-size: 175%;
+    width: 250px;
+    text-align: center;
+}
+
+#scores-link:hover {
+    color: var(--button);
+}
+
+/**
+* BODY STYLING
+* Nothing crazy here, just setting paddings, margins, etc. to get things sitting
+* correctly on the page. 
+*/
+
+body {
+    background-color: var(--light);
+}
+
 section {
     width: 60%;
-    background-color: #1A936F;
+    background-color: var(--secondary);
     display: flex;
     flex-wrap: wrap;
     flex-direction: column;
@@ -68,38 +64,37 @@ section {
     justify-items: center;
     padding: 30px;
     margin: 30px;
-    /* color: #F5F9E9; */
     border-radius: 50px;
 }
 
-input {
-    display: block;
-    margin: 5px;
+#info {
+    padding: 10px;
 }
 
-form {
-    margin: 10px;
+#assessment {
+    padding-top: 15px;
 }
 
-#start,
-#replay {
+/**
+* BUTTONS AND OPTIONS STYLING
+* This makes sure that all the different buttons, including the quiz options,
+* all have a similar visual style. Since the quiz options are larger, they get
+* a specific styling to make them look a bit different.
+*/
+
+#start {
     width: 100px;
     height: 60px;
     margin: 20px;
 }
 
 #start,
-#replay,
 li,
 .submitBtn {
-    background-color: var(--yellow);
+    background-color: var(--button);
     border: none;
     border-radius: 5px;
     box-shadow: 2px 2px 2px black;
-}
-
-.submitBtn {
-    padding: 10px;
 }
 
 ul {
@@ -110,17 +105,39 @@ li {
     padding: 20px;
     margin: 10px;
     list-style-type: none;
-    background-color: #F3DE8A;
     border-radius: 25px;
     text-align: center;
     color: black;
 }
 
+/**
+* FORM STYLING
+* The first-child selects only the text input form
+*/
+
 form {
     display: flex;
     flex-direction: column;
-    
+    margin: 10px;
 }
+
+form input:first-child {
+    padding: 5px;
+    background-color: white;
+    border: 2px inset var(--secondary);
+    margin-bottom: 10px;
+}
+
+.submitBtn {
+    padding: 10px;
+}
+
+/**
+* TABLE STYLING
+* Border collapse looks better and allows for no gaps on table styling.
+* Which row you hover over has a linear gradient highlight for easy visibility.
+* The first-child makes the initials larger than the scores.
+*/
 
 table {
     border-collapse: collapse;
@@ -133,7 +150,7 @@ tr {
 }
 
 tr:hover {
-    background-color: var(--yellow);
+    background: linear-gradient(90deg,#1A936F,#F3DE8A,#1A936F);
 }
 
 td {
@@ -145,6 +162,12 @@ td {
 td:first-child {
     font-size: 150%;
 }
+
+/**
+* DYNAMIC ASSESSMENT STYLING
+* Turns wrong answers red, and correct answers green. Has an animation for each.
+* Wrong answers are an angry shake, and correct answers are a satisfying pop. 
+*/
 
 .wrong {
     background-color: red;

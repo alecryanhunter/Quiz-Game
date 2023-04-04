@@ -1,9 +1,15 @@
-// Store questions in one array, with answers in a second array (of arrays), with indexes matching
-// Use the 0-index spot in the options array to denote which of the 4 answers is the correct one
+// The questions and options are in paired arrays, with the indices matching for
+// corrolated questions and options.
+
+// Use the index-0 spot in the individual options arrays to store which option,
+// within that same array, is the correct one. So a '3' in index-0 would indicate
+// the third question (or index-3) is the correct one. This also usefully syncs up
+// options number and index.
 var questions = ["Question 1","Question 2","Question 3","Question 4","Question 5"];
 var options = [[3,"1A","1B","1C!","1D"],[1,"2A!","2B","2C","2D"],[4,"3A","3B","3C","3D!"],[2,"4A","4B!","4C","4D"],[1,"5A!","5B","5C","5D"]];
 var highScores = []
 
+// These are all the DOM nodes I need globally, declared at the top.
 var startBtn = document.querySelector("#start");
 var replayBtn = document.querySelector("#replay");
 var timer = document.querySelector("#timer");
@@ -13,7 +19,7 @@ var assessment = document.querySelector("#assessment");
 var scoreLink = document.querySelector("#scores-link");
 var playScreen = document.querySelector(".play");
 
-// The gameTimer variable must be declared globally or the timer can't be stopped in other functions
+// These are all the global variables I need, also declared at the top.
 var timeLeft
 var gameTimer
 var place = 0
@@ -21,9 +27,13 @@ var score = 0
 var outcome
 var pause = false;
 
-// Countdown timer function
+// TIMING FUNCTIONS
+
+// This is the timer function. When called, it starts a timer that decrements
+// every second, checking if the time has reached 0. If it has, it calls the
+// timesUp function listed below.
 function startTimer() {
-    timeLeft = 100
+    timeLeft = 5
     timer.textContent = timeLeft + " seconds left";
     gameTimer = setInterval(function(){
         timeLeft--
@@ -34,27 +44,19 @@ function startTimer() {
     },1000)
 }
 
-// Function for retrieving and printing the questions. Assigns them an index number
-function renderQs() {
-    optionsField.innerHTML=""
-    infoField.removeAttribute("style");
-    startBtn.setAttribute("style","display:none");
-    if (place >= questions.length) {
-        outcome = "win";
-        endGame();
-    } else {
-        infoField.textContent = questions[place]
-        // We start the for loop at 1 so we can hide the 0-index spot since it contains the answer key
-        for (i=1;i<options[place].length;i++) {
-            var li = document.createElement("li")
-            li.textContent=options[place][i];
-            li.dataset.index=i;
-            optionsField.appendChild(li)
-        }
-        pause = false;
-    }
+// This function is called as part of an if statement checking if the game time
+// has reached 0. Once it's called, it ends the game as a loss.
+function timesUp() {
+    clearInterval(gameTimer)
+    timer.textContent = "Time's Up!";
+    outcome = "loss";
+    endGame();
 }
 
+// SCORE TRACKING FUNCTIONS
+
+// This simple function pulls and parses the scores from Local Storage, checks
+// if it's empty, and if it isn't, overwrites the current highScores array.
 function retrieveScores() {
     var storedScores = JSON.parse(localStorage.getItem("scores"));
     if (storedScores !== null) {
@@ -62,16 +64,25 @@ function retrieveScores() {
     }
 }
 
-var scoreList = document.querySelector(".play table");
+// This function is what displays the scores.
 function renderScores() {
+    var scoreList = document.querySelector(".play table");
+
+    // Sorts the highScores list, then deletes any highScores already rendered.
     highScores.sort((a,b) => b[1] - a[1])
     scoreList.innerHTML=""
+
+    // Hides everything else, shows the Start Button.
     infoField.setAttribute("style","display:none")
+    startBtn.removeAttribute("style");
     while(document.querySelector(".play .hide")) {
         var hide = document.querySelector(".hide")
         playScreen.removeChild(hide)
     }
-    startBtn.removeAttribute("style");
+
+    // Iterates over the highScores array, creating a row to hold two cells, then
+    // filling those cells with the initials and the score respectively, and then
+    // appending it to each other and the table.
     for (i=0;i<highScores.length;i++) {
         var tr = document.createElement("tr")
         var td1 = document.createElement("td")
@@ -87,26 +98,57 @@ function renderScores() {
     }
 }
 
-// This function stringifies the array of highScores and puts it into local storage.
+// This function first sorts the existing highScores array using the score numbers,
+// then stringifies it and stores that string in Local Storage.
 function storeScores() {
     highScores.sort((a,b) => b[1] - a[1])
     localStorage.setItem("scores",JSON.stringify(highScores))
 }
 
+// QUESTION RENDERING FUNCTION
 
-function timesUp() {
-    clearInterval(gameTimer)
-    timer.textContent = "Time's Up!";
-    outcome = "loss";
-    endGame();
+// This function retrieves and renders the questions and their options.
+function renderQs() {
+
+    // Removes any options already present, shows the question field and hides
+    // the Start button.
+    optionsField.innerHTML=""
+    infoField.removeAttribute("style");
+    startBtn.setAttribute("style","display:none");
+
+    // Checks if the place variable, which tracks which question we're at, exceeds
+    // the length of the questions array which would mean the end of the game.
+    if (place >= questions.length) {
+        // If true, sets the outcome to "win" and ends the game.
+        outcome = "win";
+        endGame();
+    } else {
+        // If false, it proceeds with rendering the next question and it's options.
+        // The loop starts with i at 1, since the options array has "hidden" data
+        // at index-0. It then creates, fills, and appends an li to the ul.
+        infoField.textContent = questions[place]
+        for (i=1;i<options[place].length;i++) {
+            var li = document.createElement("li")
+            li.textContent=options[place][i];
+            li.dataset.index=i;
+            optionsField.appendChild(li)
+        }
+        // This undoes the pause, allowing questions to be selected again. Without
+        // this, you could "queue" clicks and finish the entire game before the next
+        // set of options rendered.
+        pause = false;
+    }
 }
 
-// This function denotes the end of the game, setting the place to 0 for any future
-// plays of the game, then checking if the end was due to a "win" or "loss".
+// GAME END FUNCTION
+
+// This function denotes the end of the game.
 function endGame() {
+    // Clears timer and sets place to 0.
     clearInterval(gameTimer)
     place = 0;
     if (outcome === "loss") {
+        // If time expires, it changes the Start button to say "Try Again!"
         startBtn.textContent="Try Again!";
         startBtn.removeAttribute("style");
         optionsField.innerHTML="";
@@ -147,48 +189,53 @@ function endGame() {
 // EVENT LISTENERS
 
 // This function watches for a submission on the end-of-game score saving form.
-// It forces all inputs into uppercase and trims, checking for all-whitespace
-// inputs. It then creates a new array composed of the input and the score, and
-// appends it to the earlier retrieved highScores array. Finally, it renders the
-// score list immediately to disallow repeat submissions.
 document.addEventListener("submit",function(event){
     event.preventDefault();
     event.target.matches("form")
+    // Retrieves the existing list of scores, if any, from Local Storage.
     retrieveScores();
     var initialsInput = document.querySelector("form input");
+    // Trims the input, capitalizes it, and checks if it's all-whitespace.
     var initials = initialsInput.value.trim();
     initials = initials.toUpperCase();
     if (initials === "") {
         return;
     }
+    // Creates a new array, appends the initials, then the score, then appends
+    // that array onto the highScores array.
     var newScore = []
     newScore.push(initials);
     newScore.push(score);
     highScores.push(newScore)
+    // Stores and renders the new array.
     storeScores();
     renderScores();
-    assessment.textContent=""
+    // Changes the Start button text since you've now played once already.
     startBtn.textContent="Play Again"
 })
 
-// This function detects clicks on the question options. It also assesses
-// their correctness by comparing the index of the option clicked with the
-// zero-index of the relevant question's option array. It modifies the class
-// of the assessment for CSS styling. If the option was incorrect, it deducts
-// time and checks if that reduced it below 0, if so, ending the game. If not,
-// regardless of correctness, it increments the place variable and renders again.
+// This function detects clicks on the question options. The .wrong and .correct
+// classes are used for adding CSS styling dynamically.
 optionsField.addEventListener("click",function(event){
+    // This disallows the user from clicking options while the setTimeout below
+    // is waiting to execute.
     if (pause) {
         return;
     }
     var answer = event.target;
     var answerIndex = answer.getAttribute("data-index");
+    var correct = options[place][0]
+    // First checks if the element clicked was one of the options.
     if (answer.matches("li")) {
-        if (answerIndex==options[place][0]) {
+        // If so, it checks if the option clicked was correct.
+        if (answerIndex==correct) {
             answer.setAttribute("class","correct");
         } else {
-            assessment.textContent="Correct answer was: " + options[place][options[place][0]]
+            // If incorrect, applies .wrong class, deducts time, updates the
+            // assessment with the correct answer, then deducts time, checking
+            // if it exceeded the time allotment.
             answer.setAttribute("class","wrong");
+            assessment.textContent="Correct answer was: " + options[place][correct]
             timeLeft -= 10
             if(timeLeft<=0) {
                 timesUp();
@@ -197,6 +244,8 @@ optionsField.addEventListener("click",function(event){
                 timer.textContent = timeLeft + " seconds left";
             }
         }
+        // This gives the player a brief moment to see the assessment and correct
+        // answer, then moves on to the next question.
         pause = true;
         setTimeout(function(){
             assessment.textContent = ""
@@ -208,10 +257,12 @@ optionsField.addEventListener("click",function(event){
 
 // This function watches for a click on the High Scores element in the header,
 // which is present at all times. It stops the timer, changes the text of said
-//  timer, removes the assessment text, and then retrieves and renders the list
-// of scores. See functions above for more information.
+// timer, removes the assessment text, and then retrieves and renders the list
+// of scores. See relevant functions above for more information.
 scoreLink.addEventListener("click",function(){
     clearInterval(gameTimer);
+    // Without setting place to 0, you could go to the High Scores tab mid-game
+    // and then resume from that spot with a fresh timer.
     place=0
     timer.textContent = "Hit the button to start playing!";
     assessment.textContent="";
@@ -221,9 +272,9 @@ scoreLink.addEventListener("click",function(){
 })
 
 // This function watches for a click on the start button that appears on page
-// load and when the timer expires. It removes the assessment text, starts the
-// timer and starts the question rendering process. See functions above for
-// more details.
+// load and when the timer expires. It removes the assessment text, hides all
+// other objects on the page, then starts the timer and starts rendering the
+// questions. See relevant functions above for more details.
 startBtn.addEventListener("click", function() {
     for (i=0;i<highScores.length;i++) {
         var hide = document.querySelector(".hide")
@@ -234,14 +285,3 @@ startBtn.addEventListener("click", function() {
     startTimer();
     renderQs();
 })
-
-// This button is associated with the scores section, being used to replay the
-// game on a "win" or if you navigate to the scores tab. It does the same thing
-// as the previous button, say hiding the score screen and showing the play screen.
-// replayBtn.addEventListener("click", function(){
-//     playScreen.removeAttribute("style");
-//     scoreScreen.setAttribute("style","display:none");
-//     assessment.textContent=""
-//     startTimer();
-//     renderQs();
-// })
